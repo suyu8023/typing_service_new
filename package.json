@@ -1,0 +1,59 @@
+{
+  "name": "typing",
+  "version": "1.0.0",
+  "description": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "egg-scripts": "^2.10.0",
+    "format": "^0.2.2",
+    "md5": "^2.2.1",
+    "midway": "^1.0.0",
+    "moment": "^2.24.0",
+    "mysql2": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.5",
+    "sequelize-typescript": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.5.5",
+    "cross-env": "^6.0.0",
+    "egg-ci": "^1.8.0",
+    "midway-bin": "1",
+    "midway-mock": "1",
+    "ts-node": "^8.8.1",
+    "tslib": "^1.8.1",
+    "tslint": "^5.11.0",
+    "tslint-midway-contrib": "1",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=10.16.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=midway-server-typing --framework=midway --ts",
+    "stop": "egg-scripts stop --title=midway-server-typing",
+    "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
+    "clean": "midway-bin clean",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+    "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
+    "test": "npm run lint && midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "lint": "tslint --fix -p tsconfig.json -t stylish",
+    "ci": "npm run cov",
+    "build": "midway-bin build -c"
+  },
+  "ci": {
+    "version": "10"
+  },
+  "midway-bin-clean": [
+    ".vscode/.tsbuildinfo",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "suyu",
+  "license": "MIT"
+}
