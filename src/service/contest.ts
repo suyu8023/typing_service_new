@@ -12,25 +12,8 @@ import { IContestModel } from "../models/contest";
 import { IConteststatusModel } from "../models/conteststatus";
 import moment = require("moment");
 import { DB } from "../models/db";
-// import {  } from
-// import "moment/locale/zh-cn";
-// moment.locale("zh-cn");
-// const Op = Sequelize.Op;
-
-// function formatQuery(ctx: Context, options: IMessage) {
-//   const q = ctx.helper.ignoreUndefined({
-//     contestId: options.contestId,
-//     type: options.type,
-//     mode: options.mode
-//   });
-//   if (options.title) {
-//     q.title = {
-//       [Op.like]: `%${options.title}%`
-//     };
-//   }
-//   return q;
-// }
-
+import Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 @provide()
 export class ContestService {
   @inject()
@@ -68,6 +51,30 @@ export class ContestService {
 
   async findContest(cid = 0): Promise<IContest> {
     const res = await this.ContestModel.findByPk(cid);
+    return res;
+  }
+
+  async findConname(offset = 0, limit = 10, conname = ""): Promise<IContest> {
+    const res = await this.ContestModel.findAndCountAll({
+      where: {
+        contests_name: {
+          [Op.like]: "%" + conname + "%",
+        },
+      },
+      offset,
+      limit,
+      attributes: [
+        "cid",
+        "contests_name",
+        "autor",
+        "begin_time",
+        "end_time",
+        "create_time",
+        "times",
+        "mid",
+      ],
+      order: [["create_time", "desc"]],
+    });
     return res;
   }
 

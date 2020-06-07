@@ -62,6 +62,47 @@ export class StatusService {
     return obj;
   }
 
+  async UserStatus(offset: 0, limit = 10, username = ""): Promise<any> {
+    const count = await this.StatusModel.count({
+      where: {
+        username: username,
+      },
+    });
+    console.log(count);
+    const rank = await DB.sequelize.query(
+      "select * from status where username=? order by time desc limit ?, ?",
+      {
+        replacements: [username, offset, limit],
+      }
+    );
+
+    let obj = {
+      count: count,
+      rows: rank[0],
+    };
+    return obj;
+  }
+
+  async UserRankStatus(offset: 0, limit = 10, username = ""): Promise<any> {
+    const count = await this.StatusModel.count({
+      where: {
+        username: username,
+      },
+    });
+    const rank = await DB.sequelize.query(
+      "select * from status where username=? order by speed*correct_rate desc limit ?, ?",
+      {
+        replacements: [username, offset, limit],
+      }
+    );
+
+    let obj = {
+      count: count,
+      rows: rank[0],
+    };
+    return obj;
+  }
+
   async createStatus(data: IStatusCreateOptions): Promise<IStatusResult> {
     console.log(data);
 

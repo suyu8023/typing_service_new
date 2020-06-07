@@ -26,6 +26,15 @@ export class ContestController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
+  @get("/findconname")
+  async findConname(): Promise<void> {
+    const { ctx } = this;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const name: string = ctx.query.name;
+    const message: any = await this.service.findConname(offset, limit, name);
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
   @post("/update", { middleware: [EnumMiddleware.authAdmin] })
   async updateContest(): Promise<void> {
     const { ctx } = this;

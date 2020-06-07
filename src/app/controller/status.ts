@@ -19,6 +19,24 @@ export class StatusController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
+  @get("/findUserStatus")
+  async findUserStatus(): Promise<void> {
+    const { ctx } = this;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const name: string = ctx.query.name;
+    const message: any = await this.service.UserStatus(offset, limit, name);
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
+  @get("/findUserRankStatus")
+  async findUserRankStatus(): Promise<void> {
+    const { ctx } = this;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const name: string = ctx.query.name;
+    const message: any = await this.service.UserRankStatus(offset, limit, name);
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
   @post("/create", { middleware: [EnumMiddleware.authLoggedIn] })
   async createContest(): Promise<void> {
     const { ctx } = this;

@@ -26,6 +26,19 @@ export class MessageController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
+  @get("/findMesname")
+  async findMesname(): Promise<void> {
+    const mesname: string = this.ctx.query.mesname;
+    const { ctx } = this;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const message: IMessage = await this.service.findMesname(
+      offset,
+      limit,
+      mesname
+    );
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
   @post("/update", { middleware: [EnumMiddleware.authAdmin] })
   async updateMessage(): Promise<void> {
     const { ctx } = this;

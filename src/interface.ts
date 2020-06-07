@@ -34,6 +34,11 @@ export interface IMessageUpdateDataOptions {
 export interface IMessageService {
   listMessage(offset: number, limit: number, all?: boolean): Promise<IMessage>;
   findMessage(mid: number): Promise<IMessage>;
+  findMesname(
+    offset: number,
+    limit: number,
+    mesname: string
+  ): Promise<IMessage>;
   updateMessage(data: IMessageUpdateDataOptions): Promise<boolean>;
   deleteMessage(mid: number): Promise<boolean>;
   createMessage(data: IMessageCreateOptions): Promise<IMessageResult>;
@@ -80,6 +85,11 @@ export interface IContestUpdateDataOptions {
 export interface IContestService {
   listContest(offset: number, limit: number, all?: boolean): Promise<IContest>;
   findContest(mid: number): Promise<IContest>;
+  findConname(
+    offset: number,
+    limit: number,
+    conname: string
+  ): Promise<IContest>;
   updateContest(data: IContestUpdateDataOptions): Promise<boolean>;
   deleteContest(mid: number): Promise<boolean>;
   createContest(data: IContestCreateOptions): Promise<IContestResult>;
@@ -127,6 +137,8 @@ export interface IUserUpdateDataOptions {
 export interface IUserService {
   listUser(offset: number, limit: number, all?: boolean): Promise<IUser>;
   findUser(mid: number): Promise<IUser>;
+  findUserName(name: string): Promise<IUser>;
+  findNickname(offset: number, limit: number, name: string): Promise<IUser>;
   updateUser(data: IUser): Promise<boolean>;
   deleteUser(mid: number): Promise<boolean>;
   createUser(data: IContestCreateOptions): Promise<IUserResult>;
@@ -206,5 +218,7 @@ export interface IStatusCreateOptions {
 export interface IStatusService {
   createStatus(data: IStatusCreateOptions): Promise<IStatusResult>;
   rankStatus(offset: number, limit: number): Promise<any>;
+  UserRankStatus(offset: number, limit: number, name: string): Promise<any>;
+  UserStatus(offset: number, limit: number, name: string): Promise<any>;
   listStatus(offset: number, limit: number, all?: boolean): Promise<IStatus>;
 }

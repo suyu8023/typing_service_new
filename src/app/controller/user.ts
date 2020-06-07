@@ -25,6 +25,27 @@ export class UserController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
+  @get("/findNickname")
+  async findNickname(): Promise<void> {
+    const { ctx } = this;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const name: string = this.ctx.query.name;
+    const message: IUser = await this.service.findNickname(offset, limit, name);
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
+  @get("/findUsername")
+  async findUsername(): Promise<void> {
+    const { ctx } = this;
+    const name: string = this.ctx.query.name;
+    const message: IUser = await this.service.findUserName(name);
+    if (message == undefined) {
+      this.ctx.body = { success: false };
+    } else {
+      this.ctx.body = { success: true, message: "OK", data: message };
+    }
+  }
+
   @post("/update")
   async updateUse(): Promise<void> {
     const { ctx } = this;
@@ -67,7 +88,7 @@ export class UserController {
         uid: create.uid,
         username: create.username,
         nickname: create.nickname,
-        status: create.status,
+        status: 0,
       };
     } else {
       ctx.body = ctx.helper.rFail("账号密码输入有误");

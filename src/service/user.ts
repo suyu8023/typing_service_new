@@ -7,9 +7,8 @@ import {
 } from "../interface";
 import { IUserModel } from "../models/user";
 import moment = require("moment");
-// import "moment/locale/zh-cn";
-// moment.locale("zh-cn");
-// const Op = Sequelize.Op;
+import Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 let getClientIp = (req) => {
   try {
@@ -89,6 +88,39 @@ export class UserService {
     return res;
   }
 
+  async findUserName(name = ""): Promise<IUser> {
+    const res = await this.UserModel.findOne({
+      where: {
+        username: name,
+      },
+      attributes: ["username"],
+    });
+    return res;
+  }
+
+  async findNickname(offset = 0, limit = 10, name = ""): Promise<IUser> {
+    const res = await this.UserModel.findAndCountAll({
+      where: {
+        username: {
+          [Op.like]: "%" + name + "%",
+        },
+      },
+      offset,
+      limit,
+      attributes: [
+        "uid",
+        "username",
+        "nickname",
+        "email",
+        "ip",
+        "login_time",
+        "reg_time",
+        "status",
+      ],
+    });
+    return res;
+  }
+
   async updateUser(data: IUserUpdateDataOptions) {
     const { ctx } = this;
     const updateResult = await this.UserModel.update(
@@ -124,7 +156,7 @@ export class UserService {
       ip: "acm",
       login_time: time,
       reg_time: time,
-      status: data.status,
+      status: 1,
     });
     return createResult;
   }
@@ -136,6 +168,6 @@ export class UserService {
       },
       attributes: ["uid", "username", "nickname", "email", "status"],
     });
-      return judge;  
+    return judge;
   }
 }

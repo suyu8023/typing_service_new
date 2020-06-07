@@ -7,24 +7,10 @@ import {
 } from "../interface";
 import { IMessagetModel } from "../models/message";
 import moment = require("moment");
-
-// import "moment/locale/zh-cn";
-// moment.locale("zh-cn");
-// const Op = Sequelize.Op;
-
-// function formatQuery(ctx: Context, options: IMessage) {
-//   const q = ctx.helper.ignoreUndefined({
-//     contestId: options.contestId,
-//     type: options.type,
-//     mode: options.mode
-//   });
-//   if (options.title) {
-//     q.title = {
-//       [Op.like]: `%${options.title}%`
-//     };
-//   }
-//   return q;
-// }
+import Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+// var Op = Sequelize.Op;
+// var Sequelize = require('sequelize');
 
 @provide()
 export class MessageService {
@@ -50,6 +36,20 @@ export class MessageService {
 
   async findMessage(mid = 0): Promise<IMessage> {
     const res = await this.MessageModel.findByPk(mid);
+    return res;
+  }
+
+  async findMesname(offset = 0, limit = 10, mesname = ""): Promise<IMessage> {
+    const res = await this.MessageModel.findAndCountAll({
+      where: {
+        name: {
+          [Op.like]: "%" + mesname + "%",
+        },
+      },
+      offset,
+      limit,
+      attributes: ["mid", "name", "autor", "diff", "rel_time", "upd_time"],
+    });
     return res;
   }
 
