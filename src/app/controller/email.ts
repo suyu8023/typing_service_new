@@ -19,7 +19,7 @@ export class EmailController {
   @inject()
   ctx: Context;
   @post("/create")
-  async createUse(): Promise<void> {
+  async createEamil(): Promise<void> {
     const { ctx } = this;
     const { email } = ctx.request.body;
     let code = stringRandom(6);
@@ -34,8 +34,23 @@ export class EmailController {
              <p><br></p>
              <p>SDUTACM Typing_Team</p>`, // htm
     };
-    let result = await transporter.sendMail(mailOptions);
-    console.log(result);
-    ctx.body = ctx.helper.rSuc(code);
+    await transporter.sendMail(mailOptions);
+    ctx.session = {
+      email: email,
+      code: code,
+    };
+    ctx.body = ctx.helper.rSuc();
+  }
+
+  @get("/judge")
+  async judge(): Promise<void> {
+    const { ctx } = this;
+    let email = ctx.request.query.email;
+    let code = ctx.request.query.code;
+    if (email == ctx.session.email && code == ctx.session.code) {
+      ctx.body = ctx.helper.rSuc();
+    } else {
+      ctx.body = ctx.helper.rFail();
+    }
   }
 }

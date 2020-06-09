@@ -8,6 +8,7 @@ import {
 import { IUserModel } from "../models/user";
 import moment = require("moment");
 import Sequelize = require("sequelize");
+import { DB } from "../models/db";
 const Op = Sequelize.Op;
 
 let getClientIp = (req) => {
@@ -64,6 +65,7 @@ export class UserService {
         "login_time",
         "reg_time",
         "status",
+        "ch",
       ],
     });
     return res;
@@ -83,6 +85,7 @@ export class UserService {
         "login_time",
         "reg_time",
         "status",
+        "ch",
       ],
     });
     return res;
@@ -116,6 +119,7 @@ export class UserService {
         "login_time",
         "reg_time",
         "status",
+        "ch",
       ],
     });
     return res;
@@ -129,6 +133,7 @@ export class UserService {
         email: data.email,
         password: data.password,
         status: data.status,
+        ch: data.ch,
       }),
       {
         where: { uid: data.uid },
@@ -158,6 +163,14 @@ export class UserService {
       reg_time: time,
       status: 1,
     });
+    return createResult;
+  }
+
+  async createUserList(data: Array<IUserCreateOptions>): Promise<IUserResult> {
+    let time = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+    const { ctx } = this;
+
+    const createResult = await this.UserModel.bulkCreate(data);
     return createResult;
   }
   async judgeUser(username, password): Promise<IUser> {

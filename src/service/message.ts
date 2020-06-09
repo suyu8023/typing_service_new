@@ -90,51 +90,20 @@ export class MessageService {
     return createResult;
   }
 
+  async createMessageList(
+    data: Array<IMessageCreateOptions>
+  ): Promise<IMessageResult> {
+    let time = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+    const { ctx } = this;
+
+    const createResult = await this.MessageModel.bulkCreate(data);
+    return createResult;
+  }
+
   async allMessage(): Promise<IMessage> {
     const all = await this.MessageModel.findAll({
       attributes: ["mid", "name"],
     });
     return all;
   }
-
-  // async createMessage(name = "", message = "", diff = ""):Promise<IMessageResult>{
-  //   const createResult = await
-  // };
-  // async createContest(data: IContestCreateOptions): Promise<IContestResult> {
-  //   return this.ContestModel.create({
-  //     title: data.title,
-  //     description: data.description,
-  //     type: data.type,
-  //     password: data.password || "",
-  //     mode: data.mode,
-  //     startAt: data.startAt,
-  //     endAt: data.endAt,
-  //     hidden: data.hidden
-  //   }).then(r => r.get({ plain: true }));
-  // }
-
-  // async updateContest(
-  //   query: IContestUpdateQueryOptions,
-  //   data: IContestUpdateDataOptions
-  // ) {
-  //   const { ctx } = this;
-  //   const updateResult = await this.ContestModel.update(
-  //     ctx.helper.ignoreUndefined({
-  //       title: data.title,
-  //       description: data.description,
-  //       type: data.type,
-  //       password: data.password,
-  //       mode: data.mode,
-  //       startAt: data.startAt,
-  //       endAt: data.endAt,
-  //       hidden: data.hidden
-  //     }),
-  //     {
-  //       where: {
-  //         contestId: query.contestId
-  //       }
-  //     }
-  //   );
-  //   return updateResult[0] > 0;
-  // }
 }

@@ -5,8 +5,10 @@
   "private": true,
   "dependencies": {
     "@types/random-string": "0.0.28",
+    "body-parser": "^1.19.0",
     "egg-scripts": "^2.10.0",
     "format": "^0.2.2",
+    "koa-bodyparser": "^4.3.0",
     "md5": "^2.2.1",
     "midway": "^1.0.0",
     "moment": "^2.24.0",

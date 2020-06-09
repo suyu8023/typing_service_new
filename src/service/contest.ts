@@ -120,15 +120,42 @@ export class ContestService {
 
   async rankContest(cid: number, offset: number, limit = 10): Promise<any> {
     const count = await DB.sequelize.query(
-      "select count(distinct uid) as count from conteststatus where cid='" +
-        cid +
-        "'"
+      "select count(distinct uid) as count from conteststatus where cid=?",
+      {
+        replacements: [cid],
+      }
     );
 
     const rank = await DB.sequelize.query(
       "SELECT p.* FROM (SELECT * FROM conteststatus where cid = ? ORDER BY speed*correct_rate DESC  LIMIT 1000 )p GROUP BY  p.uid ORDER BY speed*correct_rate desc limit ?, ?",
       {
         replacements: [cid, offset, limit],
+      }
+    );
+    let obj = {
+      count: count,
+      rows: rank[0],
+    };
+    return obj;
+  }
+
+  async UserRankContest(
+    cid: number,
+    offset: number,
+    limit = 10,
+    uid: number
+  ): Promise<any> {
+    const count = await DB.sequelize.query(
+      "select count(*) as ss from conteststatus where cid=? and uid=?",
+      {
+        replacements: [cid, uid],
+      }
+    );
+
+    const rank = await DB.sequelize.query(
+      "select * from conteststatus  where cid=? and uid=? order by speed*correct_rate desc limit ?, ?",
+      {
+        replacements: [cid, uid, offset, limit],
       }
     );
     let obj = {
@@ -159,59 +186,4 @@ export class ContestService {
     });
     return createResult;
   }
-
-  // async addContestStatue(
-  //   cid,
-  //   uid,
-  //   mid,
-  //   username,
-  //   nickname,
-  //   speed,
-  //   correct_rate,
-  //   wordnum,
-  //   wrtime,
-  //   instan,
-  //   grade
-  // );
-
-  // async createMessage(name = "", message = "", diff = ""):Promise<IMessageResult>{
-  //   const createResult = await
-  // };
-  // async createContest(data: IContestCreateOptions): Promise<IContestResult> {
-  //   return this.ContestModel.create({
-  //     title: data.title,
-  //     description: data.description,
-  //     type: data.type,
-  //     password: data.password || "",
-  //     mode: data.mode,
-  //     startAt: data.startAt,
-  //     endAt: data.endAt,
-  //     hidden: data.hidden
-  //   }).then(r => r.get({ plain: true }));
-  // }
-
-  // async updateContest(
-  //   query: IContestUpdateQueryOptions,
-  //   data: IContestUpdateDataOptions
-  // ) {
-  //   const { ctx } = this;
-  //   const updateResult = await this.ContestModel.update(
-  //     ctx.helper.ignoreUndefined({
-  //       title: data.title,
-  //       description: data.description,
-  //       type: data.type,
-  //       password: data.password,
-  //       mode: data.mode,
-  //       startAt: data.startAt,
-  //       endAt: data.endAt,
-  //       hidden: data.hidden
-  //     }),
-  //     {
-  //       where: {
-  //         contestId: query.contestId
-  //       }
-  //     }
-  //   );
-  //   return updateResult[0] > 0;
-  // }
 }

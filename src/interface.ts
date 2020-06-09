@@ -42,6 +42,9 @@ export interface IMessageService {
   updateMessage(data: IMessageUpdateDataOptions): Promise<boolean>;
   deleteMessage(mid: number): Promise<boolean>;
   createMessage(data: IMessageCreateOptions): Promise<IMessageResult>;
+  createMessageList(
+    data: Array<IMessageCreateOptions>
+  ): Promise<IMessageResult>;
   allMessage(): Promise<IMessage>;
 }
 
@@ -94,6 +97,12 @@ export interface IContestService {
   deleteContest(mid: number): Promise<boolean>;
   createContest(data: IContestCreateOptions): Promise<IContestResult>;
   rankContest(cid: number, offset: number, limit: number): Promise<any>;
+  UserRankContest(
+    cid: number,
+    offset: number,
+    limit: number,
+    uid: number
+  ): Promise<any>;
   createContestStatus(
     data: IContestStatusCreateOptions
   ): Promise<IContestStatusResult>;
@@ -113,6 +122,7 @@ export interface IUser {
   login_time: string;
   reg_time: string;
   status: number;
+  ch?: string;
 }
 
 export interface IUserCreateOptions {
@@ -132,6 +142,7 @@ export interface IUserUpdateDataOptions {
   ip?: string;
   login_time?: string;
   status: number;
+  ch?: string;
 }
 
 export interface IUserService {
@@ -140,8 +151,10 @@ export interface IUserService {
   findUserName(name: string): Promise<IUser>;
   findNickname(offset: number, limit: number, name: string): Promise<IUser>;
   updateUser(data: IUser): Promise<boolean>;
+  updateUser1(data: IUser): Promise<boolean>;
   deleteUser(mid: number): Promise<boolean>;
   createUser(data: IContestCreateOptions): Promise<IUserResult>;
+  createUserList(data: Array<IContestCreateOptions>): Promise<IUserResult>;
   judgeUser(username, password): Promise<IUser>;
 }
 
@@ -199,6 +212,7 @@ export interface IStatus {
   time: string;
   wrtime?: string;
   instan?: string;
+  backnum?: number;
 }
 
 export interface IStatusCreateOptions {
@@ -213,6 +227,7 @@ export interface IStatusCreateOptions {
   wordnum: number;
   wrtime: string;
   instan: string;
+  backnum: number;
 }
 
 export interface IStatusService {
@@ -220,5 +235,6 @@ export interface IStatusService {
   rankStatus(offset: number, limit: number): Promise<any>;
   UserRankStatus(offset: number, limit: number, name: string): Promise<any>;
   UserStatus(offset: number, limit: number, name: string): Promise<any>;
+  UserStatusRecord(name: string): Promise<any>;
   listStatus(offset: number, limit: number, all?: boolean): Promise<IStatus>;
 }

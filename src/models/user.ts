@@ -32,6 +32,8 @@ export class UserModel extends Model<UserModel> {
   reg_time!: string;
   @Column({ type: DataType.INTEGER })
   status!: number;
+  @Column({ allowNull: true, type: DataType.STRING })
+  ch?: string;
 }
 
 export type IUserModel = typeof UserModel;

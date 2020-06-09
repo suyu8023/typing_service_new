@@ -3,6 +3,7 @@ import { IStatus, IStatusCreateOptions, IStatusResult } from "../interface";
 import { IStatusModel } from "../models/status";
 import moment = require("moment");
 import { DB } from "../models/db";
+import { IUserModel } from "../models/user";
 // import {  } from
 // import "moment/locale/zh-cn";
 // moment.locale("zh-cn");
@@ -46,8 +47,6 @@ export class StatusService {
 
   async rankStatus(offset: number, limit = 10): Promise<any> {
     const count = await this.StatusModel.count();
-    console.log(count);
-
     const rank = await DB.sequelize.query(
       "select * from status order by speed*correct_rate desc limit ?, ?",
       {
@@ -68,7 +67,6 @@ export class StatusService {
         username: username,
       },
     });
-    console.log(count);
     const rank = await DB.sequelize.query(
       "select * from status where username=? order by time desc limit ?, ?",
       {
@@ -78,6 +76,19 @@ export class StatusService {
 
     let obj = {
       count: count,
+      rows: rank[0],
+    };
+    return obj;
+  }
+
+  async UserStatusRecord(username = ""): Promise<any> {
+    const rank = await DB.sequelize.query(
+      "select date_format(time, '%Y-%m-%d') date, count(*) as count from status where username = ? group by date_format(time, '%Y-%m-%d');",
+      {
+        replacements: [username],
+      }
+    );
+    let obj = {
       rows: rank[0],
     };
     return obj;
@@ -104,9 +115,18 @@ export class StatusService {
   }
 
   async createStatus(data: IStatusCreateOptions): Promise<IStatusResult> {
-    console.log(data);
-
     let time = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+
+    // const updateResult = await this.UserModel.update(
+    //   this.ctx.helper.ignoreUndefined({
+    //     ch: data.ch.join(","),
+    //   }),
+    //   {
+    //     where: { uid: data.uid },
+    //   }
+    // );
+    // console.log(updateResult);
+
     const createResult = await this.StatusModel.create({
       uid: data.uid,
       mid: data.mid,
@@ -120,6 +140,7 @@ export class StatusService {
       time: time,
       wrtime: data.wrtime,
       instan: data.instan,
+      backname: data.backnum,
     });
     return createResult;
   }

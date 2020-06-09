@@ -72,6 +72,15 @@ export class MessageController {
     ctx.body = ctx.helper.rSuc();
   }
 
+  @post("/createList", { middleware: [EnumMiddleware.authAdmin] })
+  async createMessageList(): Promise<void> {
+    const { ctx } = this;
+    const create: IMessage = await this.service.createMessageList(
+      ctx.request.body
+    );
+    ctx.body = ctx.helper.rSuc();
+  }
+
   @get("/list")
   async allMessage(): Promise<void> {
     const { ctx } = this;

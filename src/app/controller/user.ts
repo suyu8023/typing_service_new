@@ -49,13 +49,17 @@ export class UserController {
   @post("/update")
   async updateUse(): Promise<void> {
     const { ctx } = this;
-    const update: boolean = await this.service.updateUser(
-      this.ctx.request.body
-    );
-    if (update) {
-      ctx.body = ctx.helper.rSuc();
-    } else {
+    if (ctx.session.uid !== ctx.request.body.uid && ctx.session.status == 0) {
       ctx.body = ctx.helper.rFail("更新失败");
+    } else {
+      const update: boolean = await this.service.updateUser(
+        this.ctx.request.body
+      );
+      if (update) {
+        ctx.body = ctx.helper.rSuc();
+      } else {
+        ctx.body = ctx.helper.rFail("更新失败");
+      }
     }
   }
 
@@ -77,6 +81,13 @@ export class UserController {
     ctx.body = ctx.helper.rSuc();
   }
 
+  @post("/createList")
+  async createUseList(): Promise<void> {
+    const { ctx } = this;
+    const create: IUser = await this.service.createUserList(ctx.request.body);
+    ctx.body = ctx.helper.rSuc();
+  }
+
   @post("/login")
   async judgeUse(): Promise<void> {
     const { ctx } = this;
@@ -88,8 +99,20 @@ export class UserController {
         uid: create.uid,
         username: create.username,
         nickname: create.nickname,
-        status: 0,
+        status: create.status,
       };
+    } else {
+      ctx.body = ctx.helper.rFail("账号密码输入有误");
+    }
+  }
+
+  @get("/judge")
+  async judge(): Promise<void> {
+    const { ctx } = this;
+    const { username, password } = ctx.request.query;
+    const create: IUser = await this.service.judgeUser(username, password);
+    if (create) {
+      ctx.body = ctx.helper.rSuc();
     } else {
       ctx.body = ctx.helper.rFail("账号密码输入有误");
     }

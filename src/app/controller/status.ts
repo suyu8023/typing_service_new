@@ -1,5 +1,5 @@
 import { Context, controller, get, inject, provide, post } from "midway";
-import { IStatus, IStatusService, IUser, IStatusResult } from "../../interface";
+import { IStatus, IStatusService, IUser, IUserService } from "../../interface";
 import { EnumMiddleware } from "../../enum";
 
 @provide()
@@ -34,6 +34,14 @@ export class StatusController {
     const { limit, offset } = ctx.helper.formatPagination(ctx.query);
     const name: string = ctx.query.name;
     const message: any = await this.service.UserRankStatus(offset, limit, name);
+    this.ctx.body = { success: true, message: "OK", data: message };
+  }
+
+  @get("/findUserStatusRecord")
+  async findUserStatusRecord(): Promise<void> {
+    const { ctx } = this;
+    const name: string = ctx.query.name;
+    const message: any = await this.service.UserStatusRecord(name);
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 

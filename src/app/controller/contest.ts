@@ -77,6 +77,21 @@ export class ContestController {
     this.ctx.body = { success: true, message: "OK", data: rank };
   }
 
+  @get("/rank/:cid/:uid")
+  async UserRankContest(): Promise<any> {
+    const { ctx } = this;
+    const cid: number = this.ctx.params.cid;
+    const uid: number = this.ctx.params.uid;
+    const { limit, offset } = ctx.helper.formatPagination(ctx.query);
+    const rank: any = await this.service.UserRankContest(
+      cid,
+      offset,
+      limit,
+      uid
+    );
+    this.ctx.body = { success: true, message: "OK", data: rank };
+  }
+
   @post("/status/create", { middleware: [EnumMiddleware.authLoggedIn] })
   async createContestStatus(): Promise<void> {
     const { ctx } = this;

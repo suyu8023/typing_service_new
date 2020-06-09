@@ -39,6 +39,8 @@ export class StatusModel extends Model<StatusModel> {
   wrtime?: string;
   @Column({ allowNull: true, type: DataType.STRING })
   instan?: string;
+  @Column({ allowNull: true, type: DataType.INTEGER })
+  backname?: number;
 }
 
 export type IStatusModel = typeof StatusModel;
