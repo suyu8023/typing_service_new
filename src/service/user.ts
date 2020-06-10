@@ -179,7 +179,7 @@ export class UserService {
         username: username,
         password: password,
       },
-      attributes: ["uid", "username", "nickname", "email", "status"],
+      attributes: ["uid", "username", "nickname", "email", "status", "ch"],
     });
     return judge;
   }

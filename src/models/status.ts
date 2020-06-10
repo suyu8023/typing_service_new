@@ -40,7 +40,7 @@ export class StatusModel extends Model<StatusModel> {
   @Column({ allowNull: true, type: DataType.STRING })
   instan?: string;
   @Column({ allowNull: true, type: DataType.INTEGER })
-  backname?: number;
+  backnum?: number;
 }
 
 export type IStatusModel = typeof StatusModel;

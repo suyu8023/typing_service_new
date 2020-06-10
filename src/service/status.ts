@@ -140,7 +140,7 @@ export class StatusService {
       time: time,
       wrtime: data.wrtime,
       instan: data.instan,
-      backname: data.backnum,
+      backnum: data.backnum,
     });
     return createResult;
   }

@@ -42,6 +42,8 @@ export class ConteststatusModel extends Model<ConteststatusModel> {
   wrtime!: string;
   @Column({ allowNull: true, type: DataType.STRING })
   instan?: string;
+  @Column({ allowNull: true, type: DataType.INTEGER })
+  backnum?: number;
 }
 
 export type IConteststatusModel = typeof ConteststatusModel;

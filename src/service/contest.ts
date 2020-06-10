@@ -143,19 +143,19 @@ export class ContestService {
     cid: number,
     offset: number,
     limit = 10,
-    uid: number
+    username: string
   ): Promise<any> {
     const count = await DB.sequelize.query(
-      "select count(*) as ss from conteststatus where cid=? and uid=?",
+      "select count(*) as count from conteststatus where cid=? and username=?",
       {
-        replacements: [cid, uid],
+        replacements: [cid, username],
       }
     );
 
     const rank = await DB.sequelize.query(
-      "select * from conteststatus  where cid=? and uid=? order by speed*correct_rate desc limit ?, ?",
+      "select * from conteststatus  where cid=? and username=? order by speed*correct_rate desc limit ?, ?",
       {
-        replacements: [cid, uid, offset, limit],
+        replacements: [cid, username, offset, limit],
       }
     );
     let obj = {
@@ -168,6 +168,8 @@ export class ContestService {
   async createContestStatus(
     data: IContestStatusCreateOptions
   ): Promise<IContestStatusResult> {
+    console.log(data);
+
     let time = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
     const createResult = await this.ConteststatusModel.create({
       cid: data.cid,
@@ -183,6 +185,7 @@ export class ContestService {
       time: time,
       wrtime: data.wrtime,
       instan: data.instan,
+      backnum: data.backnum,
     });
     return createResult;
   }

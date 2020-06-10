@@ -177,6 +177,7 @@ export interface IContestStatus {
   time: string;
   wrtime: string;
   instan?: string;
+  backnum?: number;
 }
 
 export interface IContestStatusCreateOptions {
@@ -192,6 +193,7 @@ export interface IContestStatusCreateOptions {
   wordnum: number;
   wrtime: string;
   instan: string;
+  backnum?: number;
 }
 
 //status
