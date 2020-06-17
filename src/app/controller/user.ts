@@ -1,5 +1,6 @@
 import { Context, controller, get, inject, provide, post } from "midway";
 import { IUser, IUserService } from "../../interface";
+import { Md5 } from "ts-md5/dist/md5";
 
 @provide()
 @controller("/user")
@@ -92,7 +93,10 @@ export class UserController {
   async judgeUse(): Promise<void> {
     const { ctx } = this;
     const { username, password } = ctx.request.body;
-    const create: IUser = await this.service.judgeUser(username, password);
+    const create: IUser = await this.service.judgeUser(
+      username,
+      Md5.hashStr(password)
+    );
     if (create) {
       ctx.body = ctx.helper.rSuc(create);
       ctx.session = {
@@ -110,7 +114,10 @@ export class UserController {
   async judge(): Promise<void> {
     const { ctx } = this;
     const { username, password } = ctx.request.query;
-    const create: IUser = await this.service.judgeUser(username, password);
+    const create: IUser = await this.service.judgeUser(
+      username,
+      Md5.hashStr(password)
+    );
     if (create) {
       ctx.body = ctx.helper.rSuc();
     } else {

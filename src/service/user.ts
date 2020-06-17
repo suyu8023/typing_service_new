@@ -9,6 +9,7 @@ import { IUserModel } from "../models/user";
 import moment = require("moment");
 import Sequelize = require("sequelize");
 import { DB } from "../models/db";
+import { Md5 } from "ts-md5/dist/md5";
 const Op = Sequelize.Op;
 
 let getClientIp = (req) => {
@@ -157,7 +158,7 @@ export class UserService {
       username: data.username,
       nickname: data.nickname,
       email: data.email,
-      password: data.password,
+      password: Md5.hashStr(data.password),
       ip: "acm",
       login_time: time,
       reg_time: time,
