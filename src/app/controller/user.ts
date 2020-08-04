@@ -124,4 +124,14 @@ export class UserController {
       ctx.body = ctx.helper.rFail("账号密码输入有误");
     }
   }
+
+  @get("/session")
+  async session(): Promise<void> {
+    const { ctx } = this;
+    if (ctx.session.username) {
+      ctx.body = ctx.helper.rSuc(ctx.session);
+    } else {
+      ctx.body = ctx.helper.rFail("请登录");
+    }
+  }
 }
