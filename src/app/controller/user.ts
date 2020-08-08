@@ -129,20 +129,10 @@ export class UserController {
   @get("/session")
   async session(): Promise<void> {
     const { ctx } = this;
-<<<<<<< HEAD
-    const session = {
-      uid: ctx.session.uid,
-      username: ctx.session.username,
-      nickname: ctx.session.nickname,
-      status: ctx.session.status,
-    };
-    this.ctx.body = { success: true, message: "OK", data: session };
-=======
     if (ctx.session.username) {
       ctx.body = ctx.helper.rSuc(ctx.session);
     } else {
       ctx.body = ctx.helper.rFail("请登录");
     }
->>>>>>> 353e0e33635befe7236d36c2fd9f6291586651bd
   }
 }
