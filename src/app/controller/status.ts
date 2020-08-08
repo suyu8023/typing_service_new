@@ -48,8 +48,12 @@ export class StatusController {
   @post("/create", { middleware: [EnumMiddleware.authLoggedIn] })
   async createContest(): Promise<void> {
     const { ctx } = this;
-    const create: IStatus = await this.service.createStatus(ctx.request.body);
-    ctx.body = ctx.helper.rSuc();
+    if (ctx.session.uid == ctx.request.body.uid) {
+      const create: IStatus = await this.service.createStatus(ctx.request.body);
+      ctx.body = ctx.helper.rSuc();
+    } else {
+      ctx.body = ctx.helper.rFail("没有权限操作");
+    }
   }
 
   @get("/rank")
