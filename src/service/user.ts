@@ -132,7 +132,7 @@ export class UserService {
       ctx.helper.ignoreUndefined({
         nickname: data.nickname,
         email: data.email,
-        password: data.password,
+        password: Md5.hashStr(data.password),
         status: data.status,
         ch: data.ch,
       }),
