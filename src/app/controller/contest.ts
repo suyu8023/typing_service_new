@@ -95,9 +95,13 @@ export class ContestController {
   @post("/status/create", { middleware: [EnumMiddleware.authLoggedIn] })
   async createContestStatus(): Promise<void> {
     const { ctx } = this;
-    const create: IContestStatus = await this.service.createContestStatus(
-      ctx.request.body
-    );
-    ctx.body = ctx.helper.rSuc();
+    if (ctx.session.uid == ctx.request.body.uid) {
+      const create: IContestStatus = await this.service.createContestStatus(
+        ctx.request.body
+      );
+      ctx.body = ctx.helper.rSuc();
+    } else {
+      ctx.body = ctx.helper.rFail("没有权限操作");
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { Context, controller, get, inject, provide, post } from "midway";
 import { IUser, IUserService } from "../../interface";
 import { Md5 } from "ts-md5/dist/md5";
+import { EnumMiddleware } from "../../enum";
 
 @provide()
 @controller("/user")
@@ -47,7 +48,7 @@ export class UserController {
     }
   }
 
-  @post("/update")
+  @post("/update", { middleware: [EnumMiddleware.authAdmin] })
   async updateUse(): Promise<void> {
     const { ctx } = this;
     if (ctx.session.uid !== ctx.request.body.uid && ctx.session.status == 0) {
@@ -64,7 +65,7 @@ export class UserController {
     }
   }
 
-  @post("/delete")
+  @post("/delete", { middleware: [EnumMiddleware.authAdmin] })
   async deleteUse(): Promise<void> {
     const { ctx } = this;
     const Delete: boolean = await this.service.deleteUser(ctx.request.body.uid);
@@ -75,14 +76,14 @@ export class UserController {
     }
   }
 
-  @post("/create")
+  @post("/create", { middleware: [EnumMiddleware.authLoggedIn] })
   async createUse(): Promise<void> {
     const { ctx } = this;
     const create: IUser = await this.service.createUser(ctx.request.body);
     ctx.body = ctx.helper.rSuc();
   }
 
-  @post("/createList")
+  @post("/createList", { middleware: [EnumMiddleware.authAdmin] })
   async createUseList(): Promise<void> {
     const { ctx } = this;
     const create: IUser = await this.service.createUserList(ctx.request.body);
@@ -122,6 +123,16 @@ export class UserController {
       ctx.body = ctx.helper.rSuc();
     } else {
       ctx.body = ctx.helper.rFail("账号密码输入有误");
+    }
+  }
+
+  @get("/session")
+  async session(): Promise<void> {
+    const { ctx } = this;
+    if (ctx.session.username) {
+      ctx.body = ctx.helper.rSuc(ctx.session);
+    } else {
+      ctx.body = ctx.helper.rFail("请登录");
     }
   }
 }
