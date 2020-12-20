@@ -9,12 +9,13 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + "_{{keys}}";
   // add your config here
   config.middleware = [];
-
+config.proxy = true;
+  config.maxIpsCount = 1;
   config.sequelize = {
     host: "127.0.0.1",
     port: "3306",
-    user: "suyu",
-    password: "suyu8023",
+    user: "root",
+    password: "test@mysql_ACM409",
     database: "typing",
     dialect: "mysql",
   };
