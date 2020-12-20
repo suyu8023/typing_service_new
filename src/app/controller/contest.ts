@@ -35,7 +35,7 @@ export class ContestController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
-  @post("/update", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/update", { middleware: [EnumMiddleware.admin] })
   async updateContest(): Promise<void> {
     const { ctx } = this;
     const update: boolean = await this.service.updateContest(
@@ -48,7 +48,7 @@ export class ContestController {
     }
   }
 
-  @post("/delete", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/delete", { middleware: [EnumMiddleware.admin] })
   async deleteContest(): Promise<void> {
     const { ctx } = this;
     const Delete: boolean = await this.service.deleteContest(

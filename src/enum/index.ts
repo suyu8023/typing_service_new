@@ -10,6 +10,7 @@ export enum EnumMiddleware {
   authLoggedIn = "authLoggedInMiddleware",
   authTeacher = "authTeacherMiddleware",
   authAdmin = "authAdminMiddleware",
+  admin = "adminMiddleware",
 }
 
 // 提交语言

@@ -39,7 +39,7 @@ export class MessageController {
     this.ctx.body = { success: true, message: "OK", data: message };
   }
 
-  @post("/update", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/update", { middleware: [EnumMiddleware.admin] })
   async updateMessage(): Promise<void> {
     const { ctx } = this;
     const update: boolean = await this.service.updateMessage(
@@ -52,7 +52,7 @@ export class MessageController {
     }
   }
 
-  @post("/delete", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/delete", { middleware: [EnumMiddleware.admin] })
   async deleteMessage(): Promise<void> {
     const { ctx } = this;
     const Delete: boolean = await this.service.deleteMessage(
@@ -65,14 +65,14 @@ export class MessageController {
     }
   }
 
-  @post("/create", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/create", { middleware: [EnumMiddleware.admin] })
   async createMessage(): Promise<void> {
     const { ctx } = this;
     const create: IMessage = await this.service.createMessage(ctx.request.body);
     ctx.body = ctx.helper.rSuc();
   }
 
-  @post("/createList", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/createList", { middleware: [EnumMiddleware.admin] })
   async createMessageList(): Promise<void> {
     const { ctx } = this;
     const create: IMessage = await this.service.createMessageList(

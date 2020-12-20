@@ -16,6 +16,18 @@ export function authMiddlewareFactory(options: { permission: number }): any {
   };
 }
 
+export function adminMiddlewareFactory(options: { permission: number }): any {
+  return async (ctx: Context, next: () => Promise<any>) => {
+    console.log(ctx.session.status, options.permission);
+
+    if (ctx.session.status === options.permission) {
+      await next();
+    } else {
+      ctx.body = ctx.helper.rFail("没有权限操作");
+    }
+  };
+}
+
 @provide()
 export class AuthLoggedInMiddleware implements WebMiddleware {
   resolve() {
@@ -34,5 +46,12 @@ export class AuthTeacherMiddleware implements WebMiddleware {
 export class AuthAdminMiddleware implements WebMiddleware {
   resolve() {
     return authMiddlewareFactory({ permission: EnumUserPerm.admin });
+  }
+}
+
+@provide()
+export class AdminMiddleware implements WebMiddleware {
+  resolve() {
+    return adminMiddlewareFactory({ permission: EnumUserPerm.admin });
   }
 }

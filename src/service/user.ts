@@ -128,11 +128,12 @@ export class UserService {
 
   async updateUser(data: IUserUpdateDataOptions) {
     const { ctx } = this;
+    console.log(data.password);
     const updateResult = await this.UserModel.update(
       ctx.helper.ignoreUndefined({
         nickname: data.nickname,
         email: data.email,
-        password: data.password,
+        password: data.password ? Md5.hashStr(data.password) : data.password,
         status: data.status,
         ch: data.ch,
       }),

@@ -12,7 +12,7 @@ export class UserController {
   @inject("userService")
   service: IUserService;
 
-  @get("/all")
+  @get("/all", { middleware: [EnumMiddleware.authLoggedIn] })
   async listUser(): Promise<void> {
     const { ctx } = this;
     const { limit, offset } = ctx.helper.formatPagination(ctx.query);
@@ -51,7 +51,7 @@ export class UserController {
   @post("/update", { middleware: [EnumMiddleware.authAdmin] })
   async updateUse(): Promise<void> {
     const { ctx } = this;
-    if (ctx.session.uid !== ctx.request.body.uid && ctx.session.status == 0) {
+    if (ctx.session.uid !== ctx.request.body.uid && ctx.session.status == 2) {
       ctx.body = ctx.helper.rFail("更新失败");
     } else {
       const update: boolean = await this.service.updateUser(
@@ -65,9 +65,11 @@ export class UserController {
     }
   }
 
-  @post("/delete", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/delete", { middleware: [EnumMiddleware.admin] })
   async deleteUse(): Promise<void> {
     const { ctx } = this;
+    console.log(ctx.session.status);
+
     const Delete: boolean = await this.service.deleteUser(ctx.request.body.uid);
     if (Delete) {
       ctx.body = ctx.helper.rSuc();
@@ -83,7 +85,7 @@ export class UserController {
     ctx.body = ctx.helper.rSuc();
   }
 
-  @post("/createList", { middleware: [EnumMiddleware.authAdmin] })
+  @post("/createList", { middleware: [EnumMiddleware.admin] })
   async createUseList(): Promise<void> {
     const { ctx } = this;
     const create: IUser = await this.service.createUserList(ctx.request.body);
@@ -129,20 +131,10 @@ export class UserController {
   @get("/session")
   async session(): Promise<void> {
     const { ctx } = this;
-<<<<<<< HEAD
-    const session = {
-      uid: ctx.session.uid,
-      username: ctx.session.username,
-      nickname: ctx.session.nickname,
-      status: ctx.session.status,
-    };
-    this.ctx.body = { success: true, message: "OK", data: session };
-=======
     if (ctx.session.username) {
       ctx.body = ctx.helper.rSuc(ctx.session);
     } else {
       ctx.body = ctx.helper.rFail("请登录");
     }
->>>>>>> 353e0e33635befe7236d36c2fd9f6291586651bd
   }
 }
